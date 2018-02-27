@@ -5,3 +5,5 @@
 /.vs/BBS/v15
 /BBS/bin/Debug/netcoreapp2.0
 /BBS/obj/Debug/netcoreapp2.0
+/.vs/config
+/BBS/BBS.csproj.user

@@ -1,8 +1,9 @@
 ﻿using BBS.Data;
+using BBS.Models;
 using System;
 using System.Linq;
 
-namespace BBS.Models
+namespace BBS.Data
 {
     public class DbInitializer
     {
