@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BBS.Pages
+namespace BBSTest.Pages
 {
     public class IndexModel : PageModel
     {

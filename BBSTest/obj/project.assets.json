@@ -12542,9 +12542,9 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\lunatic\\Documents\\Visual Studio 2017\\Projects\\BBS_Core\\BBS\\BBS.csproj",
-      "projectName": "BBS",
-      "projectPath": "D:\\lunatic\\Documents\\Visual Studio 2017\\Projects\\BBS_Core\\BBS\\BBS.csproj",
+      "projectUniqueName": "D:\\lunatic\\Documents\\Visual Studio 2017\\Projects\\BBS_Core\\BBS\\BBSTest.csproj",
+      "projectName": "BBSTest",
+      "projectPath": "D:\\lunatic\\Documents\\Visual Studio 2017\\Projects\\BBS_Core\\BBS\\BBSTest.csproj",
       "packagesPath": "C:\\Users\\lunatic\\.nuget\\packages\\",
       "outputPath": "D:\\lunatic\\Documents\\Visual Studio 2017\\Projects\\BBS_Core\\BBS\\obj\\",
       "projectStyle": "PackageReference",
