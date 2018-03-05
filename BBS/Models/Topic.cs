@@ -5,11 +5,11 @@ namespace BBS.Models
 {
     public class Topic
     {
-        public int TopicId { get; set; }
+        public string TopicId { get; set; }
         public string Title { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Content { get; set; }
-        public int NodeId { get; set; }
+        public string NodeId { get; set; }
         public DateTime AddTime { get; set; }
 
         public User User { get; set; }

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using BBS.Models.AccountViewModels;
 using BBS.Models;
+using Microsoft.Extensions.Logging;
+using BBS.Services;
 
 namespace BBS.Controllers
 {
@@ -17,6 +19,21 @@ namespace BBS.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IEmailSender _emailSender;
+        private readonly ILogger _logger;
+
+        public AccountController(
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager,
+            IEmailSender emailSender,
+            ILogger<AccountController> logger
+            )
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailSender = emailSender;
+            _logger = logger;
+        }
         
         [TempData]
         public string ErrorMessage { get; set; }
@@ -39,9 +56,168 @@ namespace BBS.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("用户登录");
+                    return RedirectToLocal(returnUrl);
+                }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl)
+        {
+            ViewData["ResultUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
+        {
+            ViewData["ResultUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = new User { Name = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("成功创建用户");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.UserId, code, Request.Scheme);
+                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("已创建新用户和密码");
+                    return RedirectToLocal(returnUrl);
+                }
+                AddErrors(result);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("注销当前账户");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if(userId == null || code == null)
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                throw new ApplicationException($"找不到用户'{userId}'");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return View(result.Succeeded ? "邮箱确认" : "出错");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    return RedirectToAction(nameof(ForgetPasswordConfirmation));
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.UserId, code, Request.Scheme);
+                await _emailSender.SendEmailAsync(model.Email, "重置密码", $"点击重置密码：<a href='{callbackUrl}'>链接</a>");
+                return RedirectToAction(nameof(ForgetPasswordConfirmation));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        public IActionResult ResetPassword(string code = null)
+        {
+            if(code == null)
+            {
+                throw new ApplicationException("重置密码需要验证码");
+            }
+            var model = new ResetPasswordViewModel { Code = code };
+            return View(model);
+        }
+
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if(user == null)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(ResetPasswordConfirmation));
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
     }
 }

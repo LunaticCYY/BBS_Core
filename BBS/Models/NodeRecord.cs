@@ -4,9 +4,9 @@ namespace BBS.Models
 {
     public class NodeRecord
     {
-        public int NodeRecordId { get; set; }
-        public int UserId { get; set; }
-        public int NodeId { get; set; }
+        public string NodeRecordId { get; set; }
+        public string UserId { get; set; }
+        public string NodeId { get; set; }
         public DateTime AddTime { get; set; }
 
         public User User { get; set; }

@@ -4,6 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BBS.Data;
+using System;
+using BBS.Services;
+using BBS.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BBS
 {
@@ -21,6 +25,12 @@ namespace BBS
         {
             services.AddDbContext<BBSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BBSConnection")));
 
+            services.AddDbContext<BBSContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BBSContext>().AddDefaultTokenProviders();
+
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddMvc();
         }
 
@@ -31,6 +41,7 @@ namespace BBS
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -38,6 +49,8 @@ namespace BBS
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

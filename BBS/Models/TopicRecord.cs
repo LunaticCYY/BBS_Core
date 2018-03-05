@@ -4,9 +4,9 @@ namespace BBS.Models
 {
     public class TopicRecord
     {
-        public int TopicRecordId { get; set; }
-        public int UserId { get; set; }
-        public int TopicId { get; set; }
+        public string TopicRecordId { get; set; }
+        public string UserId { get; set; }
+        public string TopicId { get; set; }
         public DateTime AddTime { get; set; }
 
         public User User { get; set; }

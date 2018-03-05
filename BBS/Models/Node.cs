@@ -10,11 +10,11 @@ namespace BBS.Models
     }
     public class Node
     {
-        public int NodeId { get; set; }
+        public string NodeId { get; set; }
         public string Name { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IsParent IsParent { get; set; }
-        public int ParentId { get; set; }
+        public string ParentId { get; set; }
         public DateTime AddTime { get; set; }
 
         public User User { get; set; }

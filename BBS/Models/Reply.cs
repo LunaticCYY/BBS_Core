@@ -4,10 +4,10 @@ namespace BBS.Models
 {
     public class Reply
     {
-        public int ReplyId { get; set; }
-        public int UserId { get; set; }
-        public int TopicId { get; set; }
-        public int ParentId { get; set; }
+        public string ReplyId { get; set; }
+        public string UserId { get; set; }
+        public string TopicId { get; set; }
+        public string ParentId { get; set; }
         public string Content { get; set; }
         public DateTime AddTime { get; set; }
 
