@@ -8,6 +8,7 @@ using System;
 using BBS.Services;
 using BBS.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace BBS
 {
@@ -30,6 +31,11 @@ namespace BBS
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BBSContext>().AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.ConfigureApplicationCookie(identityOptionsCookies =>
+            {
+                identityOptionsCookies.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            });
 
             services.AddMvc();
         }

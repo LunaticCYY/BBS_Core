@@ -62,13 +62,19 @@ namespace BBS.Controllers
                     _logger.LogInformation("用户登录");
                     return RedirectToLocal(returnUrl);
                 }
+                else
+                {
+                    _logger.LogWarning("{ Email }登录失败.", model.Email);
+                    ModelState.AddModelError(string.Empty, "用户名或密码错误");
+                    return View(model);
+                }
             }
             return View(model);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl)
+        public IActionResult Register(string returnUrl = null)
         {
             ViewData["ResultUrl"] = returnUrl;
             return View();
@@ -77,23 +83,23 @@ namespace BBS.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ResultUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { Name = model.Email, Email = model.Email };
+                var user = new User { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("成功创建用户");
+                    _logger.LogInformation("成功创建用户.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.UserId, code, Request.Scheme);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("已创建新用户和密码");
+                    _logger.LogInformation("已创建新用户和密码.");
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -107,7 +113,7 @@ namespace BBS.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("注销当前账户");
+            _logger.LogInformation("注销当前账户.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
@@ -122,7 +128,7 @@ namespace BBS.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if(user == null)
             {
-                throw new ApplicationException($"找不到用户'{userId}'");
+                throw new ApplicationException($"找不到用户.'{userId}'");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "邮箱确认" : "出错");
@@ -136,7 +142,7 @@ namespace BBS.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
         {
@@ -149,7 +155,7 @@ namespace BBS.Controllers
                 }
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink(user.UserId, code, Request.Scheme);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "重置密码", $"点击重置密码：<a href='{callbackUrl}'>链接</a>");
                 return RedirectToAction(nameof(ForgetPasswordConfirmation));
             }
@@ -163,16 +169,21 @@ namespace BBS.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
         {
             if(code == null)
             {
-                throw new ApplicationException("重置密码需要验证码");
+                throw new ApplicationException("重置密码需要验证码.");
             }
             var model = new ResetPasswordViewModel { Code = code };
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)

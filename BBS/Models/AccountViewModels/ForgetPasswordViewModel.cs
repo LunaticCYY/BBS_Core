@@ -10,6 +10,7 @@ namespace BBS.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "注册邮箱")]
         public string Email { get; set; }
     }
 }
