@@ -10,8 +10,9 @@ namespace BBS.Models
         public string ParentId { get; set; }
         public string Content { get; set; }
         public DateTime AddTime { get; set; }
+        public DateTime LastTime { get; set; }
 
-        public User User { get; set; }
-        public Topic Topic { get; set; }
+        //public User User { get; set; }
+        //public Topic Topic { get; set; }
     }
 }

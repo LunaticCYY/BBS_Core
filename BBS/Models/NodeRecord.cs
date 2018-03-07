@@ -9,7 +9,7 @@ namespace BBS.Models
         public string NodeId { get; set; }
         public DateTime AddTime { get; set; }
 
-        public User User { get; set; }
-        public Node Node { get; set; }
+        //public User User { get; set; }
+        //public Node Node { get; set; }
     }
 }
