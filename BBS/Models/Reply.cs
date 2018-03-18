@@ -12,7 +12,7 @@ namespace BBS.Models
         public DateTime AddTime { get; set; }
         public DateTime LastTime { get; set; }
 
-        //public User User { get; set; }
-        //public Topic Topic { get; set; }
+        public User User { get; set; }
+        public Topic Topic { get; set; }
     }
 }

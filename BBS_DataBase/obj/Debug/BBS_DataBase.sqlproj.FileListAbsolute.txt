@@ -1,0 +1,5 @@
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS_DataBase\bin\Debug\BBS_DataBase.dacpac
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS_DataBase\bin\Debug\BBS_DataBase.dll
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS_DataBase\bin\Debug\BBS_DataBase.pdb
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS_DataBase\obj\Debug\BBS_DataBase.dll
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS_DataBase\obj\Debug\BBS_DataBase.pdb

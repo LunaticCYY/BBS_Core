@@ -9,7 +9,7 @@ namespace BBS.Models
         public string TopicId { get; set; }
         public DateTime AddTime { get; set; }
 
-        //public User User { get; set; }
-        //public Topic Topic { get; set; }
+        public User User { get; set; }
+        public Topic Topic { get; set; }
     }
 }

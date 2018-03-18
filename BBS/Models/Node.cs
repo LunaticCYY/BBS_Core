@@ -17,7 +17,7 @@ namespace BBS.Models
         public string ParentId { get; set; }
         public DateTime AddTime { get; set; }
 
-        //public User User { get; set; }
-        //public ICollection<NodeRecord> NodeRecords { get; set; }
+        public User User { get; set; }
+        public ICollection<NodeRecord> NodeRecords { get; set; }
     }
 }

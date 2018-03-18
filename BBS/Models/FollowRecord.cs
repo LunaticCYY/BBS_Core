@@ -9,6 +9,6 @@ namespace BBS.Models
         public string FollowId { get; set; }
         public DateTime AddTime { get; set; }
 
-        //public User User { get; set; }
+        public User User { get; set; }
     }
 }
