@@ -10,6 +10,7 @@ using BBS.Models.AccountViewModels;
 using BBS.Models;
 using Microsoft.Extensions.Logging;
 using BBS.Services;
+using BBS.Data;
 
 namespace BBS.Controllers
 {
@@ -211,6 +212,74 @@ namespace BBS.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeUserInfo()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
+            {
+                throw new ApplicationException($"无法获取当前用户Id'{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new ChangeUserInfoViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Image = user.Image,
+                Introduce = user.Introduce
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUserInfo(ChangeUserInfoViewModel model, string returnUrl = null)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
+            {
+                throw new ApplicationException($"无法获取当前用户Id'{_userManager.GetUserId(User)}'.");
+            }
+
+            if(!string.IsNullOrEmpty(model.UserName) && user.UserName.Equals(model.UserName))
+            {
+                user.UserName = model.UserName;
+            }
+            if (!string.IsNullOrEmpty(model.Email) && user.Email.Equals(model.Email))
+            {
+                user.Email = model.Email;
+            }
+            if (!string.IsNullOrEmpty(model.PhoneNumber) && user.PhoneNumber.Equals(model.PhoneNumber))
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+            if (!string.IsNullOrEmpty(model.Image) && user.Image.Equals(model.Image))
+            {
+                user.Image = model.Image;
+            }
+            if (!string.IsNullOrEmpty(model.Introduce) && user.Introduce.Equals(model.Introduce))
+            {
+                user.Introduce = model.Introduce;
+            }
+
+            await _userManager.UpdateAsync(user);
+            return RedirectToLocal(returnUrl);
+        }
+
+        #region Helpers
         private void AddErrors(IdentityResult result)
         {
             foreach(var error in result.Errors)
@@ -230,5 +299,7 @@ namespace BBS.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
+
+        #endregion
     }
 }
