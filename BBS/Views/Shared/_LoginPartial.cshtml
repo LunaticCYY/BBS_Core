@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using BBS.Models
-
-@inject SignInManager<User> SignInManager
+﻿@inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
 @if (SignInManager.IsSignedIn(User))
