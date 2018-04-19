@@ -12,8 +12,8 @@ using System;
 namespace BBS.Migrations
 {
     [DbContext(typeof(BBSContext))]
-    [Migration("20180407153101_InitDB")]
-    partial class InitDB
+    [Migration("20180419154222_20180419_InitDB")]
+    partial class _20180419_InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,7 @@ namespace BBS.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("FollowId");
+                    b.Property<string>("FollowUserId");
 
                     b.Property<string>("UserId");
 
@@ -117,13 +117,21 @@ namespace BBS.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<DateTime>("LastReplyTime");
+
+                    b.Property<string>("LastReplyUserId");
+
                     b.Property<DateTime>("LastTime");
 
                     b.Property<string>("NodeId");
 
+                    b.Property<int>("ReplyCount");
+
                     b.Property<string>("Title");
 
                     b.Property<string>("UserId");
+
+                    b.Property<int>("ViewCount");
 
                     b.HasKey("TopicId");
 

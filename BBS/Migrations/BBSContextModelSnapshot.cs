@@ -28,7 +28,7 @@ namespace BBS.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<string>("FollowId");
+                    b.Property<string>("FollowUserId");
 
                     b.Property<string>("UserId");
 
@@ -116,13 +116,21 @@ namespace BBS.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<DateTime>("LastReplyTime");
+
+                    b.Property<string>("LastReplyUserId");
+
                     b.Property<DateTime>("LastTime");
 
                     b.Property<string>("NodeId");
 
+                    b.Property<int>("ReplyCount");
+
                     b.Property<string>("Title");
 
                     b.Property<string>("UserId");
+
+                    b.Property<int>("ViewCount");
 
                     b.HasKey("TopicId");
 

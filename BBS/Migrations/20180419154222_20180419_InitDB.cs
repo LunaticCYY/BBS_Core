@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BBS.Migrations
 {
-    public partial class InitDB : Migration
+    public partial class _20180419_InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -129,7 +129,7 @@ namespace BBS.Migrations
                 {
                     FollowRecordId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FollowId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FollowUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -198,10 +198,14 @@ namespace BBS.Migrations
                     TopicId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastReplyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastReplyUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ReplyCount = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ViewCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

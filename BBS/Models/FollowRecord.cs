@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BBS.Models
 {
@@ -6,9 +7,11 @@ namespace BBS.Models
     {
         public string FollowRecordId { get; set; }
         public string UserId { get; set; }
-        public string FollowId { get; set; }
+        public string FollowUserId { get; set; }
         public DateTime AddTime { get; set; }
 
         public User User { get; set; }
+        [NotMapped]
+        public User FollowUser { get; set; }
     }
 }

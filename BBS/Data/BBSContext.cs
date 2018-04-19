@@ -12,6 +12,14 @@ namespace BBS.Data
 
         }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Node> Nodes { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Reply> Replys { get; set; }
+        public DbSet<NodeRecord> NodeRecords { get; set; }
+        public DbSet<TopicRecord> TopicRecords { get; set; }
+        public DbSet<FollowRecord> FollowRecords { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<IdentityRole>().HasKey(m => m.Id);
