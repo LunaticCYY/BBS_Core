@@ -12,8 +12,8 @@ using System;
 namespace BBS.Migrations
 {
     [DbContext(typeof(BBSContext))]
-    [Migration("20180419154222_20180419_InitDB")]
-    partial class _20180419_InitDB
+    [Migration("20180421173137_Test20180422")]
+    partial class Test20180422
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,8 @@ namespace BBS.Migrations
 
                     b.HasKey("FollowRecordId");
 
+                    b.HasIndex("FollowUserId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("FollowRecord");
@@ -47,7 +49,7 @@ namespace BBS.Migrations
 
                     b.Property<DateTime>("AddTime");
 
-                    b.Property<int>("IsParent");
+                    b.Property<int?>("IsParent");
 
                     b.Property<string>("Name");
 
@@ -90,6 +92,8 @@ namespace BBS.Migrations
                     b.Property<DateTime>("AddTime");
 
                     b.Property<string>("Content");
+
+                    b.Property<int?>("IsTopic");
 
                     b.Property<DateTime>("LastTime");
 
@@ -134,6 +138,8 @@ namespace BBS.Migrations
                     b.Property<int>("ViewCount");
 
                     b.HasKey("TopicId");
+
+                    b.HasIndex("LastReplyUserId");
 
                     b.HasIndex("NodeId");
 
@@ -199,7 +205,7 @@ namespace BBS.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<int>("State");
+                    b.Property<int?>("State");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -304,6 +310,10 @@ namespace BBS.Migrations
 
             modelBuilder.Entity("BBS.Models.FollowRecord", b =>
                 {
+                    b.HasOne("BBS.Models.User", "FollowUser")
+                        .WithMany("FollowUserRecords")
+                        .HasForeignKey("FollowUserId");
+
                     b.HasOne("BBS.Models.User", "User")
                         .WithMany("FollowRecords")
                         .HasForeignKey("UserId");
@@ -340,6 +350,10 @@ namespace BBS.Migrations
 
             modelBuilder.Entity("BBS.Models.Topic", b =>
                 {
+                    b.HasOne("BBS.Models.User", "LastReplyUser")
+                        .WithMany("LastUserTopics")
+                        .HasForeignKey("LastReplyUserId");
+
                     b.HasOne("BBS.Models.Node", "Node")
                         .WithMany()
                         .HasForeignKey("NodeId");

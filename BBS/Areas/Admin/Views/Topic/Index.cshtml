@@ -1,0 +1,90 @@
+﻿@model IEnumerable<BBS.Models.Topic>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Content)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ViewCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReplyCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastReplyTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AddTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastTime)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastReplyUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NodeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ViewCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReplyCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastReplyTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastReplyUser.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Node.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TopicId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TopicId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TopicId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

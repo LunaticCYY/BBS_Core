@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace BBS.Interfaces
+namespace BBS.Services
 {
     public interface IOperation<T> where T : class
     {

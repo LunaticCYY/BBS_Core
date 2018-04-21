@@ -1,14 +1,11 @@
-﻿using BBS.Interfaces;
-using BBS.Models;
+﻿using BBS.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
 using BBS.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BBS.Operations
+namespace BBS.Services
 {
     public class TopicOperation : Operation<Topic>, ITopicOperation
     {

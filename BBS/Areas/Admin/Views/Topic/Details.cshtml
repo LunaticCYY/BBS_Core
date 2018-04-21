@@ -1,0 +1,79 @@
+﻿@model BBS.Models.Topic
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Topic</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ViewCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ViewCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReplyCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReplyCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastReplyUserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastReplyUser.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NodeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Node.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.TopicId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

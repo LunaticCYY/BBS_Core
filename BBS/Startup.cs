@@ -38,6 +38,16 @@ namespace BBS
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy(
+            //        "Admin",
+            //        authBuilder =>
+            //        {
+            //            authBuilder.RequireClaim("Admin", "Allowed");
+            //        });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +70,10 @@ namespace BBS
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areaRoute",
+                    template: "{area:exists}/{controller}/{action}",
+                    defaults: new { action = "Index" });
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

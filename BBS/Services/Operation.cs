@@ -1,16 +1,11 @@
-﻿using BBS.Interfaces;
-using Microsoft.CodeAnalysis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Semantics;
-using BBS.Models;
 using System.Linq.Expressions;
 using BBS.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BBS.Operations
+namespace BBS.Services
 {
     public class Operation<T> : IOperation<T> where T : class
     {

@@ -1,9 +1,8 @@
 ﻿using BBS.Models;
-using BBS.Models;
 using System;
 using System.Linq.Expressions;
 
-namespace BBS.Interfaces
+namespace BBS.Services
 {
     public interface ITopicOperation
     {

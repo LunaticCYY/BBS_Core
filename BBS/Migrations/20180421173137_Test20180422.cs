@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BBS.Migrations
 {
-    public partial class _20180419_InitDB : Migration
+    public partial class Test20180422 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -114,7 +114,7 @@ namespace BBS.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: true),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -129,12 +129,18 @@ namespace BBS.Migrations
                 {
                     FollowRecordId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FollowUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FollowUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FollowRecord", x => x.FollowRecordId);
+                    table.ForeignKey(
+                        name: "FK_FollowRecord_User_FollowUserId",
+                        column: x => x.FollowUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FollowRecord_User_UserId",
                         column: x => x.UserId,
@@ -149,7 +155,7 @@ namespace BBS.Migrations
                 {
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsParent = table.Column<int>(type: "int", nullable: false),
+                    IsParent = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -199,7 +205,7 @@ namespace BBS.Migrations
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastReplyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastReplyUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastReplyUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LastTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NodeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ReplyCount = table.Column<int>(type: "int", nullable: false),
@@ -210,6 +216,12 @@ namespace BBS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Topic", x => x.TopicId);
+                    table.ForeignKey(
+                        name: "FK_Topic_User_LastReplyUserId",
+                        column: x => x.LastReplyUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Topic_Node_NodeId",
                         column: x => x.NodeId,
@@ -231,6 +243,7 @@ namespace BBS.Migrations
                     ReplyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AddTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTopic = table.Column<int>(type: "int", nullable: true),
                     LastTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TopicId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -280,6 +293,11 @@ namespace BBS.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FollowRecord_FollowUserId",
+                table: "FollowRecord",
+                column: "FollowUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FollowRecord_UserId",
                 table: "FollowRecord",
                 column: "UserId");
@@ -308,6 +326,11 @@ namespace BBS.Migrations
                 name: "IX_Reply_UserId",
                 table: "Reply",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Topic_LastReplyUserId",
+                table: "Topic",
+                column: "LastReplyUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Topic_NodeId",
