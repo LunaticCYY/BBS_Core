@@ -38,6 +38,15 @@ namespace BBS
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+            services.AddSingleton<IOperation<Node>, Operation<Node>>();
+            services.AddSingleton<IOperation<NodeRecord>, Operation<NodeRecord>>();
+            services.AddSingleton<IOperation<TopicRecord>, Operation<TopicRecord>>();
+            services.AddSingleton<IOperation<FollowRecord>, Operation<FollowRecord>>();
+            services.AddSingleton<ITopicOperation, TopicOperation>();
+            services.AddSingleton<IReplyOperation, ReplyOperation>();
+            services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<UserServices>();
+            //services.AddMemoryCache();
 
             //services.AddAuthorization(options =>
             //{

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BBS.Services
 {
-    public class ReplyOperation : Operation<Reply>
+    public class ReplyOperation : Operation<Reply>, IReplyOperation
     {
         private readonly BBSContext _dbContext;
         public ReplyOperation(BBSContext dbContext) : base(dbContext)
@@ -16,9 +16,14 @@ namespace BBS.Services
             _dbContext = dbContext;
         }
 
+        public override IEnumerable<Reply> TList()
+        {
+            return _dbContext.Replys.Include(a => a.User).Include(a => a.Topic);
+        }
+
         public override IEnumerable<Reply> TList(Expression<Func<Reply, bool>> predicate)
         {
-            return _dbContext.Replys.Include(a => a.User).Where(predicate);
+            return _dbContext.Replys.Include(a => a.User).Include(a => a.Topic).Where(predicate);
         }
     }
 }

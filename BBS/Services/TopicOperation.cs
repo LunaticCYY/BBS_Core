@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using BBS.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace BBS.Services
 {
@@ -18,6 +19,16 @@ namespace BBS.Services
         public override Topic GetById(string id)
         {
             return _dbContext.Topics.Include(a => a.User).Include(a => a.Node).Include(a => a.LastReplyUser).FirstOrDefault(a => a.TopicId == id);
+        }
+
+        public override IEnumerable<Topic> TList()
+        {
+            return _dbContext.Topics.Include(a => a.User).Include(a => a.Node).Include(a => a.LastReplyUser);
+        }
+
+        public override IEnumerable<Topic> TList(Expression<Func<Topic, bool>> predicate)
+        {
+            return _dbContext.Topics.Include(a => a.User).Include(a => a.Node).Include(a => a.LastReplyUser).Where(predicate);
         }
 
         public Page<Topic> PageList(int pageSize = 50, int pageIndex = 1)
