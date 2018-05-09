@@ -10,7 +10,7 @@ namespace BBS.Services
     {
         void Add(T model);
         void Delete(T model);
-        void Edit(T model);
+        void Update(T model);
         T GetById(string id);
         IEnumerable<T> TList();
         IEnumerable<T> TList(Expression<Func<T, bool>> predicate);

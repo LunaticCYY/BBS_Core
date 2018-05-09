@@ -11,9 +11,9 @@
             <div class="panel-heading clearfix">
                 <div class="pull-right">
                     <span class="l">查看:</span>
-                    @foreach (var nodeItem in ViewBag.NodeListItem)
+                    @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
                     {
-                        <a asp-action="Index" asp-route-id="@nodeItem.Value">@nodeItem.Text|</a>
+                        <a asp-action="Index" asp-route-id="@item.NodeId">@item.Name|</a>
                     }
                 </div>
             </div>
@@ -93,20 +93,33 @@
         <div id="sections" class="panel panel-default">
             <div class="panel-heading">讨论节点分类导航</div>
             <div class="panel-body">
-                <div class="row node-list">
-                    @foreach (var item in nodes)
+                @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
+                {
+                    <div class="widget">
+                        <h4 class="title"><a asp-controller="" asp-action="Index" asp-route-id="@item">@item.Name</a></h4>
+                        <div class="content tag-cloud">
+                        @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
+                        {
+                            <a asp-controller="" asp-action="Index" asp-route-id="@n.NodeId">@n.Name</a>
+                        }
+                        </div>
+                    </div>
+                }
+                <hr />
+                @*<div class="row node-list">
+                    @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
                     {
                         <div class="node media">
-                            <label class="media-left">@item.Name</label>
+                            <label class="media-left"><a asp-controller="" asp-action="Index" asp-route-id="@item">@item.Name</a></label>
                             <span class="nodes media-body">
                                 @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
                                 {
-                                    <span class="name"><a title="@n.Name" href="/topic/node/@n.Name">@n.Name</a></span>
+                                    <span class="name"><a asp-controller="" asp-action="Index" asp-route-id="@n.NodeId">@n.Name</a></span>
                                 }
                             </span>
                         </div>
                     }
-                </div>
+                </div>*@
             </div>
         </div>
     </div>

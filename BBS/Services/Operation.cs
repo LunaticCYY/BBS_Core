@@ -28,7 +28,7 @@ namespace BBS.Services
             _dbContext.SaveChanges();
         }
 
-        public void Edit(T model)
+        public void Update(T model)
         {
             _dbContext.Entry(model).State = EntityState.Modified;
             _dbContext.SaveChanges();
@@ -36,7 +36,7 @@ namespace BBS.Services
 
         public virtual T GetById(string id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Set<T>().Find(id);
         }
 
         public virtual IEnumerable<T> TList()

@@ -72,25 +72,42 @@ namespace BBS.Controllers
             ViewBag.PageCount = topicResult.GetPageCount();
             var User = userServices.User.Result;
             ViewBag.User = User;
-            ViewBag.NodeRecordCount = _nodeRecord.TList(a => a.UserId == User.Id).ToList().Count();
-            ViewBag.TopicRecordCount = _topicRecord.TList(a => a.UserId == User.Id).ToList().Count();
-            ViewBag.FollowRecordCount = _followRecord.TList(a => a.UserId == User.Id).ToList().Count();
+            if(User != null)
+            {
+                ViewBag.NodeRecordCount = _nodeRecord.TList(a => a.UserId == User.Id).ToList().Count();
+                ViewBag.TopicRecordCount = _topicRecord.TList(a => a.UserId == User.Id).ToList().Count();
+                ViewBag.FollowRecordCount = _followRecord.TList(a => a.UserId == User.Id).ToList().Count();
+            }
             var nodes = _node.TList().ToList();
             ViewBag.Nodes = nodes;
-            ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
+            //ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(Topic model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.ViewCount = 0;
+                model.ReplyCount = 0;
+                model.AddTime = DateTime.Now;
+                _topic.Add(model);
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "在线论坛系统";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "联系方式";
 
             return View();
         }
