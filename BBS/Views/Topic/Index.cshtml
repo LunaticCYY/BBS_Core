@@ -4,7 +4,8 @@
     ViewData["Title"] = Model.Title;
     var replyList = ViewBag.Replys as List<Reply>;
     var user = await services.User;
-    string replyUser = string.Empty;
+    var IsTopicRecord = ViewBag.IsTopicRecord;
+    var IsFollowRecord = ViewBag.IsFollowRecord;
 }
 <div class="row">
     <div class="col-md-9" style="margin-top:20px;">
@@ -17,7 +18,7 @@
                         ·
                         <a href="#">@Model.User.UserName</a>
                         ·
-                        于 <abbr class="timeago">@Model.AddTime.ToString("MM-dd HH:mm")</abbr>发布
+                        于 <abbr class="timeago">@Model.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>发布
                         ·
                         @Model.ViewCount 次阅读
                     </div>
@@ -25,9 +26,73 @@
                 <div class="media-right">
                     <a href="#"><img class="media-object avatar-48" src="@(string.IsNullOrEmpty(Model.User.Image)?"/images/96.png": "/"+Model.User.Image)"></a>
                 </div>
+                
             </div>
             <div class="panel-body markdown">
                 <p id="content">@Model.Content</p>
+            </div>
+            <div class="panel-footer">
+                <div style="float:left">
+                    <form class="form-inline" method="post" asp-controller="Topic" asp-action="AddTopicRecord">
+                        @if (user != null)
+                        {
+                            <input type="hidden" name="TopicId" value="@Model.TopicId" />
+                            <input type="hidden" name="UserId" value="@(user.Id)" />
+                            if (IsTopicRecord == 0)
+                            {
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    收藏此帖
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    已收藏
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                收藏此帖
+                            </button>
+                        }
+                    </form>
+                </div>
+                <div>
+                    <form class="form-inline" method="post" asp-controller="Topic" asp-action="AddFollowRecord">
+                        @if (user != null)
+                        {
+                            <input type="hidden" name="FollowRecordId" value="@Model.TopicId" />
+                            <input type="hidden" name="FollowUserId" value="@Model.User.Id" />
+                            <input type="hidden" name="UserId" value="@(user.Id)" />
+                            if (IsFollowRecord == 0)
+                            {
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    关注此楼主
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    已关注楼主
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default btn-sm" disabled="disabled">
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                关注作者
+                            </button>
+                        }
+                    </form>
+                </div>  
             </div>
         </div>
         <div class="panel panel-default">
@@ -39,20 +104,20 @@
                 {
                     var item = replyList[i];
                     <div class="reply" data-id="@item.ReplyId" id="reply@(i+1)">
-                        <div class="avatar">
+                        <div class="avatar media-left">
                             <a href="#">
                                 <img class="media-object avatar-48" src="@(string.IsNullOrEmpty(item.User.Image)?"/images/96.png": "/"+item.User.Image)">
                             </a>
                         </div>
-                        <div class="infos">
+                        <div class="infos media-right">
                             <div class="info">
                                 <span class="name">
                                     <a href="#replyuser_@item.User.Id">@item.User.UserName</a>
                                 </span> ·
                                 <span class="time">
-                                    <a class="reply-floor" href="#reply@(i+1)">#@(i + 1)</a> · <abbr class="timeago">@item.AddTime.ToString("MM-dd HH:mm")</abbr>
+                                    <a class="reply-floor" href="#reply@(i+1)">#@(i + 1)</a> · <abbr class="timeago">@item.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>
                                 </span>
-                                <span class="opts pull-right">
+                                <span>
                                     <a title="赞" data-count="0" data-state="" data-type="Reply" data-id="297575" class="likeable " href="#"><i class="fa fa-thumbs-up"></i> <span></span></a>
                                     <a data-floor="1" data-login="adamshen" title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
                                 </span>
@@ -62,6 +127,7 @@
                             </div>
                         </div>
                     </div>
+                    <hr />
                 }
             </div>
         </div>
@@ -70,11 +136,11 @@
             {
                 <form class="form-horizontal" method="post" asp-controller="Topic" asp-action="Index">
                     <input type="hidden" name="TopicId" value="@Model.TopicId" />
-                    <input type="hidden" name="ReplyUserId" value="@(user.Id)" />
+                    <input type="hidden" name="UserId" value="@(user.Id)" />
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">内容</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" rows="10" placeholder="填写内容" name="ReplyContent" data-provide="markdown"></textarea>
+                        <label class="col-sm-2 control-label" for="Content">内容</label>
+                        <div class="col-sm-10" id="Content">
+                            <textarea class="form-control" rows="10" placeholder="填写内容" name="Content" data-provide="markdown"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -93,8 +159,8 @@
             }
         </div>
     </div>
-    <div class="col-md-3">
-        @Html.Partial("_RightSidePartial")
+    <div class="col-md-3" style="margin-top:20px;">
+        @Html.Partial("_TopicSidePartial")
     </div>
 </div>
 @section scripts{

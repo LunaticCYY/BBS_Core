@@ -23,7 +23,7 @@ namespace BBS.Services
 
         public override IEnumerable<Reply> TList(Expression<Func<Reply, bool>> predicate)
         {
-            return _dbContext.Replys.Include(a => a.User).Include(a => a.Topic).Where(predicate);
+            return _dbContext.Replys.Include(a => a.User).Include(a => a.Topic).Where(predicate).OrderBy(r => r.AddTime);
         }
     }
 }
