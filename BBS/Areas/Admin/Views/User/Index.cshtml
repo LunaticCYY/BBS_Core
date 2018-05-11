@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<BBS.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "用户管理";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>用户管理</h2>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -29,15 +29,20 @@
                     @Html.DisplayNameFor(model => model.State)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserName)
+                    @*@Html.DisplayNameFor(model => model.UserName)*@
+                    用户名
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    @*@Html.DisplayNameFor(model => model.Email)*@
+                    邮箱
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                    @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
+                    手机号码
                 </th>
-            <th></th>
+                <th>
+                    操作
+                </th>
         </tr>
     </thead>
     <tbody>
@@ -68,9 +73,9 @@
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.Id">用户详情</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
             </td>
         </tr>
 }

@@ -80,7 +80,7 @@ namespace BBS.Controllers
             }
             var nodes = _node.TList().ToList();
             ViewBag.Nodes = nodes;
-            //ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
+            ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
             return View();
         }
 
@@ -94,6 +94,18 @@ namespace BBS.Controllers
                 model.ReplyCount = 0;
                 model.AddTime = DateTime.Now;
                 _topic.Add(model);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddNodeRecord([Bind("UserId,NodeId")]NodeRecord nodeRecord)
+        {
+            if (ModelState.IsValid)
+            {
+                nodeRecord.AddTime = DateTime.Now;
+                _nodeRecord.Add(nodeRecord);
             }
             return RedirectToAction("Index");
         }

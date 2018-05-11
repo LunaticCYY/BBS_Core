@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<BBS.Models.Topic>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "帖子管理";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>帖子管理</h2>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -43,7 +43,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.UserId)
             </th>
-            <th></th>
+            <th>
+                操作
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -80,9 +82,9 @@
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.TopicId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TopicId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TopicId">Delete</a>
+                @*<a asp-action="Edit" asp-route-id="@item.TopicId">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.TopicId">详情</a> |
+                <a asp-action="Delete" asp-route-id="@item.TopicId">删除</a>
             </td>
         </tr>
 }

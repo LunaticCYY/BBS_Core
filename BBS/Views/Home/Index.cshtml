@@ -31,10 +31,10 @@
                                 </a>
                             </div>
                             <div class="info">
-                                <a href="/topic/node/@item.NodeId">@item.NodeName</a> &nbsp;<label>@item.UserName</label>&nbsp;发布于 @item.AddTime.ToString("MM-dd HH:mm")
+                                <a href="/topic/node/@item.NodeId">@item.NodeName</a> &nbsp;<label>@item.UserName</label>&nbsp;发布于 @item.AddTime.ToString("yyyy-MM-dd HH:mm")
                                 @if (item.LastReplyTime != DateTime.MinValue)
                                 {
-                                    <label>最后回复 @item.LastReplyTime.ToString("MM-dd HH:mm")</label>
+                                    <label>最后回复 @item.LastReplyTime.ToString("yyyy-MM-dd HH:mm")</label>
                                 }
                             </div>
                         </div>

@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<BBS.Models.Node>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "节点管理";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>节点管理</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">创建新节点</a>
 </p>
 <table class="table">
     <thead>
@@ -50,9 +50,9 @@
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NodeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NodeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NodeId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.NodeId">修改</a> |
+                <a asp-action="Details" asp-route-id="@item.NodeId">详情</a> |
+                <a asp-action="Delete" asp-route-id="@item.NodeId">删除</a>
             </td>
         </tr>
 }

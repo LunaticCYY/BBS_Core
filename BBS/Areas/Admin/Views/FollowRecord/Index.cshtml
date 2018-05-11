@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<BBS.Models.FollowRecord>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "关注用户管理";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>关注用户管理</h2>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -22,7 +22,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.AddTime)
             </th>
-            <th></th>
+            <th>
+                操作
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,9 +40,9 @@
                 @Html.DisplayFor(modelItem => item.AddTime)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FollowRecordId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FollowRecordId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FollowRecordId">Delete</a>
+                @*<a asp-action="Edit" asp-route-id="@item.FollowRecordId">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.FollowRecordId">详情</a>
+                @*<a asp-action="Delete" asp-route-id="@item.FollowRecordId">Delete</a>*@
             </td>
         </tr>
 }

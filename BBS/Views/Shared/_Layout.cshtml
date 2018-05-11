@@ -7,6 +7,7 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/lib/bootstrap-markdown/css/bootstrap-markdown.min.css" rel="stylesheet" />
     </environment>
@@ -32,9 +33,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">关于</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">联系</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -43,7 +44,7 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        <footer style="text-align:center">
             <p>&copy; 2018 - BBS</p>
         </footer>
     </div>
