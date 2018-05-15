@@ -254,23 +254,23 @@ namespace BBS.Controllers
                 throw new ApplicationException($"无法获取当前用户Id'{_userManager.GetUserId(User)}'.");
             }
 
-            if(!string.IsNullOrEmpty(model.UserName) && user.UserName.Equals(model.UserName))
+            if(!string.IsNullOrEmpty(model.UserName) && !user.UserName.Equals(model.UserName))
             {
                 user.UserName = model.UserName;
             }
-            if (!string.IsNullOrEmpty(model.Email) && user.Email.Equals(model.Email))
+            if (!string.IsNullOrEmpty(model.Email) && !user.Email.Equals(model.Email))
             {
                 user.Email = model.Email;
             }
-            if (!string.IsNullOrEmpty(model.PhoneNumber) && user.PhoneNumber.Equals(model.PhoneNumber))
+            if (!string.IsNullOrEmpty(model.PhoneNumber) && !user.PhoneNumber.Equals(model.PhoneNumber))
             {
                 user.PhoneNumber = model.PhoneNumber;
             }
-            if (!string.IsNullOrEmpty(model.Image) && user.Image.Equals(model.Image))
+            if (!string.IsNullOrEmpty(model.Image) && !user.Image.Equals(model.Image))
             {
                 user.Image = model.Image;
             }
-            if (!string.IsNullOrEmpty(model.Introduce) && user.Introduce.Equals(model.Introduce))
+            if (!string.IsNullOrEmpty(model.Introduce) && !user.Introduce.Equals(model.Introduce))
             {
                 user.Introduce = model.Introduce;
             }
