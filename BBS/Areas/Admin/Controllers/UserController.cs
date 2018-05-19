@@ -23,7 +23,7 @@ namespace BBS.Areas.Admin.Controllers
         // GET: Admin/User
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _context.Users.Where(a => a.UserName != "admin").ToListAsync());
         }
 
         // GET: Admin/User/Details/5

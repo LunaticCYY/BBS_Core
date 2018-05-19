@@ -38,6 +38,7 @@ namespace BBS
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+            services.AddSingleton<IOperation<User>, Operation<User>>();
             services.AddSingleton<IOperation<Node>, Operation<Node>>();
             services.AddSingleton<IOperation<NodeRecord>, Operation<NodeRecord>>();
             services.AddSingleton<IOperation<TopicRecord>, Operation<TopicRecord>>();
@@ -46,17 +47,6 @@ namespace BBS
             services.AddSingleton<IReplyOperation, ReplyOperation>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<UserServices>();
-            //services.AddMemoryCache();
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(
-            //        "Admin",
-            //        authBuilder =>
-            //        {
-            //            authBuilder.RequireClaim("Admin", "Allowed");
-            //        });
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

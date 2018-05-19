@@ -22,7 +22,7 @@
                 {
                     <div class="topic">
                         <div class="avatar media-left">
-                            <a href="#"><img class="avatar-48" src="@(string.IsNullOrEmpty(item.Image)?"/images/96.png":"/"+item.Image)" alt="96"></a>
+                            <a href="#"><img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.Image)? "/UploadImages/default.png":"/UploadImages/"+item.Image)"></a>
                         </div>
                         <div class="media-body">
                             <div class="title">
@@ -99,29 +99,15 @@
                 {
                     <div class="widget">
                         <h4 class="title"><a asp-controller="" asp-action="Index" asp-route-id="@item">@item.Name</a></h4>
-                        <div class="content tag-cloud">
+                        <div class="content">
                         @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
                         {
                             <a asp-controller="" asp-action="Index" asp-route-id="@n.NodeId">@n.Name</a>
                         }
                         </div>
                     </div>
+                    <hr />
                 }
-                <hr />
-                @*<div class="row node-list">
-                    @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
-                    {
-                        <div class="node media">
-                            <label class="media-left"><a asp-controller="" asp-action="Index" asp-route-id="@item">@item.Name</a></label>
-                            <span class="nodes media-body">
-                                @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
-                                {
-                                    <span class="name"><a asp-controller="" asp-action="Index" asp-route-id="@n.NodeId">@n.Name</a></span>
-                                }
-                            </span>
-                        </div>
-                    }
-                </div>*@
             </div>
         </div>
     </div>

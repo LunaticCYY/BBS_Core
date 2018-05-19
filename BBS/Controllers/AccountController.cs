@@ -11,6 +11,9 @@ using BBS.Models;
 using Microsoft.Extensions.Logging;
 using BBS.Services;
 using BBS.Data;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BBS.Controllers
 {
@@ -21,19 +24,25 @@ namespace BBS.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
+        private IOperation<User> _user;
         private readonly ILogger _logger;
+        private IHostingEnvironment _hostingEnvironment;
 
         public AccountController(
             UserManager<User> userManager, 
             SignInManager<User> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger
+            IOperation<User> user,
+            ILogger<AccountController> logger,
+            IHostingEnvironment hostingEnvironment
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _user = user;
+            _hostingEnvironment = hostingEnvironment;
         }
         
         [TempData]
@@ -89,7 +98,13 @@ namespace BBS.Controllers
             ViewData["ResultUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var CheckEmail = _user.TList(a => a.Email == model.Email).ToList();
+                if(CheckEmail != null || CheckEmail.Count > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "该邮箱已被注册");
+                    return View(model);
+                }
+                var user = new User { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -232,7 +247,6 @@ namespace BBS.Controllers
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Image = user.Image,
                 Introduce = user.Introduce
             };
             return View(model);
@@ -249,37 +263,64 @@ namespace BBS.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if(user == null)
+            if (user == null)
             {
                 throw new ApplicationException($"无法获取当前用户Id'{_userManager.GetUserId(User)}'.");
             }
-
-            if(!string.IsNullOrEmpty(model.UserName) && !user.UserName.Equals(model.UserName))
+            string imageSave = string.Empty;
+            if(model.Image != null)
+            {
+                imageSave = SaveImage(model.Image);
+            }
+            
+            if (!string.IsNullOrEmpty(model.UserName) && !user.UserName.Equals(model.UserName))
             {
                 user.UserName = model.UserName;
+                user.NormalizedUserName = model.UserName;
             }
             if (!string.IsNullOrEmpty(model.Email) && !user.Email.Equals(model.Email))
             {
                 user.Email = model.Email;
+                user.NormalizedEmail = model.Email;
             }
             if (!string.IsNullOrEmpty(model.PhoneNumber) && !user.PhoneNumber.Equals(model.PhoneNumber))
             {
                 user.PhoneNumber = model.PhoneNumber;
             }
-            if (!string.IsNullOrEmpty(model.Image) && !user.Image.Equals(model.Image))
+            if (!string.IsNullOrEmpty(imageSave))
             {
-                user.Image = model.Image;
+                user.Image = imageSave;
             }
-            if (!string.IsNullOrEmpty(model.Introduce) && !user.Introduce.Equals(model.Introduce))
+            if (!string.IsNullOrEmpty(model.Introduce))
             {
                 user.Introduce = model.Introduce;
             }
 
-            await _userManager.UpdateAsync(user);
+            _user.Update(user);
             return RedirectToLocal(returnUrl);
         }
 
         #region Helpers
+        private string SaveImage(IFormFile imageFile)
+        {
+            string filePath = _hostingEnvironment.WebRootPath + @"\UploadImages\";
+            string fileSave = string.Empty;
+            string imageName = string.Empty;
+
+            if (imageFile.Length > 0)
+            {
+                string fileExt = imageFile.ContentType.Split("/")[1];
+                imageName = Guid.NewGuid().ToString();
+                fileSave = imageName + "." + fileExt;
+                filePath += fileSave;
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+            }
+
+            return string.IsNullOrEmpty(fileSave) ? string.Empty : fileSave;
+        }
         private void AddErrors(IdentityResult result)
         {
             foreach(var error in result.Errors)
@@ -299,6 +340,8 @@ namespace BBS.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
+
+
 
         #endregion
     }

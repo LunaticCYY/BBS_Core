@@ -5,10 +5,13 @@
     <div class="panel-heading">
         @if (SignInManager.IsSignedIn(User))
         {
-            <div class="avatar media-middle">
-                <a href="#"><img class="avatar-48" src="@(string.IsNullOrEmpty(UserManager.GetUserAsync(User).Result.Image)?"/images/96.png":"/"+ UserManager.GetUserAsync(User).Result.Image)" alt="96"></a>
+            <div class="avatar media-left">
+                <a href="#"><img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(UserManager.GetUserAsync(User).Result.Image)? "/UploadImages/default.png":"/UploadImages/"+ UserManager.GetUserAsync(User).Result.Image)"></a>
             </div>
-            <h3 class="panel-title media-middle">@UserManager.GetUserName(User)</h3>
+            <div class="panel-title media-left">
+                <br />
+                <a href="#">@UserManager.GetUserAsync(User).Result.UserName</a>
+            </div>
             <div class="panel-body">
                 <a data-toggle="modal" data-target="#addNodeRecordModal">节点收藏：@ViewBag.NodeRecordCount</a>
                 <hr />
@@ -39,7 +42,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">节点</label>
                                     <div class="col-sm-10">
-                                        <select name="NodeId" asp-items="ViewBag.NodeListItem" class="form-control">
+                                        <select name="NodeIdList" asp-items="ViewBag.NodeListItem" required class="form-control selectpicker" multiple data-live-search="true" data-actions-box="true">
                                         </select>
                                     </div>
                                 </div>

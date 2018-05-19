@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="media-right">
-                    <a href="#"><img class="media-object avatar-48" src="@(string.IsNullOrEmpty(Model.User.Image)?"/images/96.png": "/"+Model.User.Image)"></a>
+                    <a href="#"><img class="media-object img-thumbnail" width="70" height="70" src="@(string.IsNullOrEmpty(Model.User.Image)? "/UploadImages/default.png": "/UploadImages/"+Model.User.Image)"></a>
                 </div>
                 
             </div>
@@ -106,7 +106,7 @@
                     <div class="reply" data-id="@item.ReplyId" id="reply@(i+1)">
                         <div class="avatar media-left">
                             <a href="#">
-                                <img class="media-object avatar-48" src="@(string.IsNullOrEmpty(item.User.Image)?"/images/96.png": "/"+item.User.Image)">
+                                <img class="media-object avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.User.Image)?"/UploadImages/default.png": "/UploadImages/"+item.User.Image)">
                             </a>
                         </div>
                         <div class="infos media-right">

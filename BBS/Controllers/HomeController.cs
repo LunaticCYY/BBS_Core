@@ -8,6 +8,8 @@ using System.Linq;
 using BBS.Models.TopicViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BBS.Data;
+using System.Collections.Generic;
+using BBS.Models.HomeViewModels;
 
 namespace BBS.Controllers
 {
@@ -100,14 +102,79 @@ namespace BBS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNodeRecord([Bind("UserId,NodeId")]NodeRecord nodeRecord)
+        public IActionResult AddNodeRecord([Bind("UserId,NodeIdList")]NodeRecordModel nodeRecordModel)
         {
             if (ModelState.IsValid)
             {
-                nodeRecord.AddTime = DateTime.Now;
-                _nodeRecord.Add(nodeRecord);
+                foreach(string nodeId in nodeRecordModel.NodeIdList)
+                {
+                    var nodeRecordCheck = _nodeRecord.TList(a => a.UserId == nodeRecordModel.UserId).Where(a => a.NodeId == nodeId);
+                    if(nodeRecordCheck == null || nodeRecordCheck.Count() == 0)
+                    {
+                        NodeRecord nodeRecord = new NodeRecord();
+                        nodeRecord.UserId = nodeRecordModel.UserId;
+                        nodeRecord.NodeId = nodeId;
+                        nodeRecord.AddTime = DateTime.Now;
+                        _nodeRecord.Add(nodeRecord);
+                    }
+                }
             }
             return RedirectToAction("Index");
+        }
+
+        [Route("Home/Node/{nodeId}")]
+        public IActionResult Node(string nodeId)
+        {
+            if (string.IsNullOrEmpty(nodeId))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var pageSize = 50;
+            var pageIndex = 1;
+            Page<Topic> topicResult = null;
+            if (!string.IsNullOrEmpty(Request.Query["page"]))
+            {
+                pageIndex = Convert.ToInt32(Request.Query["page"]);
+            }
+            if (!string.IsNullOrEmpty(Request.Query["s"]))
+            {
+                topicResult = _topic.PageList(a => a.Title.Contains(Request.Query["s"]), pageSize, pageIndex);
+            }
+            else
+            {
+                topicResult = _topic.PageList(pageSize, pageIndex);
+            }
+            ViewBag.Topics = topicResult.List.Select(a => new TopicViewModel
+            {
+                TopicId = a.TopicId,
+                Title = a.Title,
+                Image = a.User.Image,
+                NodeId = a.NodeId,
+                NodeName = a.Node.Name,
+                UserId = a.UserId,
+                UserName = a.User.UserName,
+                LastReplyUserId = a.LastReplyUserId,
+                LastReplyUserName = a.LastReplyUser == null ? string.Empty : a.LastReplyUser.UserName,
+                ReplyCount = a.ReplyCount,
+                LastReplyTime = a.LastReplyTime,
+                AddTime = a.AddTime,
+                LastTime = a.LastTime
+            }).ToList();
+            ViewBag.Count = topicResult.Total;
+            ViewBag.PageIndex = pageIndex;
+            ViewBag.PageCount = topicResult.GetPageCount();
+            var userId = UserManager.GetUserId(User);
+            if (userId != null)
+            {
+                ViewBag.NodeRecordCount = _nodeRecord.TList(a => a.UserId == userId).ToList().Count();
+                ViewBag.TopicRecordCount = _topicRecord.TList(a => a.UserId == userId).ToList().Count();
+                ViewBag.FollowRecordCount = _followRecord.TList(a => a.UserId == userId).ToList().Count();
+            }
+            var nodes = _node.TList().ToList();
+            ViewBag.Nodes = nodes;
+            ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
+            return View();
         }
 
         public IActionResult About()
