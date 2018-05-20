@@ -19,7 +19,7 @@ namespace BBS.Services
 
         public override FollowRecord GetById(string id)
         {
-            return _dbContext.FollowRecords.Include(a => a.User).Include(a => a.FollowUser).FirstOrDefault(a => a.UserId == id);
+            return _dbContext.FollowRecords.Include(a => a.User).Include(a => a.FollowUser).FirstOrDefault(a => a.FollowRecordId == id);
         }
 
         public override IEnumerable<FollowRecord> TList()

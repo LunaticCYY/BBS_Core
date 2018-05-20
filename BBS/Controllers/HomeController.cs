@@ -143,7 +143,7 @@ namespace BBS.Controllers
             }
             else
             {
-                topicResult = _topic.PageList(pageSize, pageIndex);
+                topicResult = _topic.PageList(a => a.NodeId == nodeId, pageSize, pageIndex);
             }
             ViewBag.Topics = topicResult.List.Select(a => new TopicViewModel
             {
@@ -171,9 +171,8 @@ namespace BBS.Controllers
                 ViewBag.TopicRecordCount = _topicRecord.TList(a => a.UserId == userId).ToList().Count();
                 ViewBag.FollowRecordCount = _followRecord.TList(a => a.UserId == userId).ToList().Count();
             }
-            var nodes = _node.TList().ToList();
-            ViewBag.Nodes = nodes;
-            ViewBag.NodeListItem = nodes.Select(a => new SelectListItem { Value = a.NodeId, Text = a.Name });
+            var node = _node.GetById(nodeId);
+            ViewBag.Node = node;
             return View();
         }
 

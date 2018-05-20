@@ -13,7 +13,7 @@
                     <span class="l">查看:</span>
                     @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
                     {
-                        <a asp-action="Index" asp-route-id="@item.NodeId">@item.Name|</a>
+                        <a href="/Home/Node/@item.NodeId">@item.Name|</a>
                     }
                 </div>
             </div>
@@ -31,7 +31,7 @@
                                 </a>
                             </div>
                             <div class="info">
-                                <a href="/topic/node/@item.NodeId">@item.NodeName</a> &nbsp;<label>@item.UserName</label>&nbsp;发布于 @item.AddTime.ToString("yyyy-MM-dd HH:mm")
+                                <a href="Home/Node/@item.NodeId">@item.NodeName</a> &nbsp;<a href="/Account/UserInfo/@item.UserId"><label>@item.UserName</label></a> @item.AddTime.ToString("yyyy-MM-dd HH:mm")
                                 @if (item.LastReplyTime != DateTime.MinValue)
                                 {
                                     <label>最后回复 @item.LastReplyTime.ToString("yyyy-MM-dd HH:mm")</label>
@@ -41,7 +41,7 @@
                         <div class="count media-right">
                             @if (item.ReplyCount > 0)
                             {
-                                <a class="state-false" href="/Topic/@item.TopicId#reply@(item.ReplyCount)">@item.ReplyCount</a>
+                                <a class="navbar-static-top" href="/Topic/@item.TopicId#reply@(item.ReplyCount)">@item.ReplyCount</a>
                             }
                         </div>
                     </div>
@@ -98,11 +98,11 @@
                 @foreach (var item in nodes.Where(r => r.IsParent == IsParent.Parent))
                 {
                     <div class="widget">
-                        <h4 class="title"><a asp-controller="" asp-action="Index" asp-route-id="@item">@item.Name</a></h4>
+                        <h4 class="title"><a href="/Home/Node/@item.NodeId">@item.Name</a></h4>
                         <div class="content">
                         @foreach (var n in nodes.Where(r => r.ParentId == item.NodeId))
                         {
-                            <a asp-controller="" asp-action="Index" asp-route-id="@n.NodeId">@n.Name</a>
+                            <a href="/Home/Node/@n.NodeId">@n.Name</a>
                         }
                         </div>
                     </div>

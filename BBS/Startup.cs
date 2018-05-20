@@ -45,6 +45,9 @@ namespace BBS
             services.AddSingleton<IOperation<FollowRecord>, Operation<FollowRecord>>();
             services.AddSingleton<ITopicOperation, TopicOperation>();
             services.AddSingleton<IReplyOperation, ReplyOperation>();
+            services.AddSingleton<INodeRecordOperation, NodeRecordOperation>();
+            services.AddSingleton<ITopicRecordOperation, TopicRecordOperation>();
+            services.AddSingleton<IFollowRecordOperation, FollowRecordOperation>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<UserServices>();
         }

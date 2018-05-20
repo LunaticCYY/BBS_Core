@@ -164,7 +164,13 @@ namespace BBS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var topic = await _context.Topics.SingleOrDefaultAsync(m => m.TopicId == id);
+            var topic = await _context.Topics.Include(t => t.LastReplyUser).Include(t => t.Node).Include(t => t.User).SingleOrDefaultAsync(m => m.TopicId == id);
+            if(topic != null)
+            {
+                topic.User = null;
+                topic.Node = null;
+                topic.LastReplyUser = null;
+            }
             _context.Topics.Remove(topic);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

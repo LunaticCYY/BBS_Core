@@ -40,7 +40,7 @@ namespace BBS.Controllers
             {
                 return Redirect("/");
             }
-            var replys = _reply.TList(a => a.TopicId == id).ToList();
+            var replys = _reply.TList(a => a.TopicId == id).OrderBy(a => a.AddTime).ToList();
             topic.ViewCount += 1;
             _topic.Update(topic);
             var topicRecord = _topicRecord.TList(a => a.TopicId == id);

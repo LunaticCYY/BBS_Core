@@ -10,14 +10,14 @@
             </div>
             <div class="panel-title media-left">
                 <br />
-                <a href="#">@UserManager.GetUserAsync(User).Result.UserName</a>
+                <a href="/Account/UserInfo/@UserManager.GetUserAsync(User).Result.Id">@UserManager.GetUserAsync(User).Result.UserName</a>
             </div>
             <div class="panel-body">
-                <a data-toggle="modal" data-target="#addNodeRecordModal">节点收藏：@ViewBag.NodeRecordCount</a>
+                <a data-toggle="modal" data-target="#addNodeRecordModal">节点收藏：</a><a href="/Account/NodeRecord">@ViewBag.NodeRecordCount</a>
                 <hr />
-                <a asp-controller="" asp-action="Edit" asp-route-id="">话题收藏：@ViewBag.TopicRecordCount</a>
+                <a>话题收藏：</a><a href="/Account/TopicRecord">@ViewBag.TopicRecordCount</a>
                 <hr />
-                <a asp-controller="" asp-action="Edit" asp-route-id="">特别关注：@ViewBag.FollowRecordCount</a>
+                <a>特别关注：</a><a href="/Account/FollowRecord">@ViewBag.FollowRecordCount</a>
                 <hr />
                 <a href="#NewTopic">发布新话题</a>
                 <hr />

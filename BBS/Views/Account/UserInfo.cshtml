@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "用户主页";
+    var User = ViewBag.User;
+    var TopicCount = ViewBag.TopicCount;
+    var ReplyCount = ViewBag.ReplyCount;
+    var Topics = ViewBag.Topics as List<Topic>;
+    var Replys = ViewBag.Replys as List<Reply>;
+}
+
+<div id="main" style="margin-top:20px;">
+    <div class="row">
+        <div class="sidebar col-md-4" id="sidebar">
+            <div class="panel profile panel-default">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="avatar media-left">
+                            <div class="image"><img class="media-object avatar-48" width="70" height="70" src="@(string.IsNullOrEmpty(User.Image)? "/UploadImages/default.png":"/UploadImages/"+User.Image)"></div>
+                        </div>
+                        <div class="media-body">
+                            <div class="item">
+                                @User.UserName
+                                <span class="opts pull-right">
+                                </span>
+                            </div>
+                            <div class="item number">
+                                <span title="注册日期">@User.AddTime.ToString("yyyy-MM-dd")</span>
+                            </div>
+                            <div class="item counts">
+                                <span>@TopicCount</span> 篇帖子 • <span>@ReplyCount</span> 条回帖
+                            </div>
+                            <div class="item social">
+                                <i>@User.Introduce</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#topics" data-toggle="tab">最近发布</a></li>
+                    <li><a href="#replies" data-toggle="tab">最近回帖</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade in active recent-topics" id="topics">
+                        <div class="panel panel-default">
+                            <ul class="list-group">
+                                @foreach (var item in Topics)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="title">
+                                            <a class="node" href="/topic/@item.NodeId">@item.Node.Name</a>
+                                            <a title="@item.Title" href="/topic/@item.TopicId">@item.Title</a>
+                                        </div>
+                                        <div class="info">
+                                            <span class="counter">@item.ReplyCount 条回复</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade recent-replies" id="replies">
+                        <div class="panel panel-default">
+                            <ul class="list-group">
+                                @foreach (var item in Replys)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="title">
+                                            <a href="/topic/@item.TopicId">@item.Content</a>
+                                            <span class="info">于 <abbr class="timeago" title="@item.AddTime.ToString("yyyy-MM-dd HH:mm:ss")">@(DateTime.Now.Subtract(item.AddTime).Days) 天前</abbr></span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

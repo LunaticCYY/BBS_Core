@@ -23,26 +23,41 @@ namespace BBS.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IEmailSender _emailSender;
+        //private readonly IEmailSender _emailSender;
         private IOperation<User> _user;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
         private IHostingEnvironment _hostingEnvironment;
+        private ITopicOperation _topic;
+        private IReplyOperation _reply;
+        private INodeRecordOperation _nodeRecord;
+        private ITopicRecordOperation _topicRecord;
+        private IFollowRecordOperation _followRecord;
 
         public AccountController(
             UserManager<User> userManager, 
             SignInManager<User> signInManager,
-            IEmailSender emailSender,
+            //IEmailSender emailSender,
             IOperation<User> user,
-            ILogger<AccountController> logger,
-            IHostingEnvironment hostingEnvironment
+            //ILogger<AccountController> logger,
+            IHostingEnvironment hostingEnvironment,
+            ITopicOperation topic,
+            IReplyOperation reply,
+            INodeRecordOperation nodeRecord,
+            ITopicRecordOperation topicRecord,
+            IFollowRecordOperation followRecord
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
-            _logger = logger;
+            //_emailSender = emailSender;
+            //_logger = logger;
             _user = user;
             _hostingEnvironment = hostingEnvironment;
+            _topic = topic;
+            _reply = reply;
+            _nodeRecord = nodeRecord;
+            _topicRecord = topicRecord;
+            _followRecord = followRecord;
         }
         
         [TempData]
@@ -69,12 +84,12 @@ namespace BBS.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("用户登录");
+                    //_logger.LogInformation("用户登录");
                     return RedirectToLocal(returnUrl);
                 }
                 else
                 {
-                    _logger.LogWarning("{ Email }登录失败.", model.Email);
+                    //_logger.LogWarning("{ Email }登录失败.", model.Email);
                     ModelState.AddModelError(string.Empty, "用户名或密码错误");
                     return View(model);
                 }
@@ -99,7 +114,7 @@ namespace BBS.Controllers
             if (ModelState.IsValid)
             {
                 var CheckEmail = _user.TList(a => a.Email == model.Email).ToList();
-                if(CheckEmail != null || CheckEmail.Count > 0)
+                if(CheckEmail != null && CheckEmail.Count > 0)
                 {
                     ModelState.AddModelError(string.Empty, "该邮箱已被注册");
                     return View(model);
@@ -108,14 +123,14 @@ namespace BBS.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("成功创建用户.");
+                    //_logger.LogInformation("成功创建用户.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("已创建新用户和密码.");
+                    //_logger.LogInformation("已创建新用户和密码.");
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -129,108 +144,121 @@ namespace BBS.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("注销当前账户.");
+            //_logger.LogInformation("注销当前账户.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        public IActionResult ChangePassword([Bind("Password,NewPassword,ConfirmPassword")]ChangePasswordViewModel model)
         {
-            if(userId == null || code == null)
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if(user == null)
-            {
-                throw new ApplicationException($"找不到用户.'{userId}'");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "邮箱确认" : "出错");
+            var userId = _userManager.GetUserId(User);
+            var user = _user.GetById(userId);
+            _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            return RedirectToAction("Login");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ForgetPassword()
+        [Route("/Account/UserInfo/{userId}")]
+        public IActionResult UserInfo(string userId)
         {
+            var user = _user.GetById(userId);
+            var topics = _topic.TList(a => a.UserId == userId).OrderByDescending(a => a.AddTime).ToList();
+            var replys = _reply.TList(a => a.UserId == userId).OrderByDescending(a => a.AddTime).ToList();
+            ViewBag.TopicCount = topics.Count;
+            ViewBag.ReplyCount = replys.Count;
+            ViewBag.User = user;
+            ViewBag.Topics = topics;
+            ViewBag.Replys = replys;
             return View();
+        }
+
+        [Route("/Account/NodeRecord")]
+        public IActionResult NodeRecord()
+        {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var nodeRecord = _nodeRecord.TList(a => a.UserId == userId).OrderByDescending(a => a.AddTime).ToList();
+            return View(nodeRecord);
+        }
+
+        [Route("/Account/TopicRecord")]
+        public IActionResult TopicRecord()
+        {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var topicRecord = _topicRecord.TList(a => a.UserId == userId).OrderByDescending(a => a.AddTime).ToList();
+            return View(topicRecord);
+        }
+
+        [Route("/Account/FollowRecord")]
+        public IActionResult FollowRecord()
+        {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var followRecord = _followRecord.TList(a => a.UserId == userId).OrderByDescending(a => a.AddTime).ToList();
+            return View(followRecord);
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
+        public IActionResult CancelNodeRecord([Bind("NodeRecordId,UserId,NodeId,AddTime")]NodeRecord nodeRecord)
         {
-            if (ModelState.IsValid)
+            if (!_signInManager.IsSignedIn(User))
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if(user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    return RedirectToAction(nameof(ForgetPasswordConfirmation));
-                }
-
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "重置密码", $"点击重置密码：<a href='{callbackUrl}'>链接</a>");
-                return RedirectToAction(nameof(ForgetPasswordConfirmation));
+                return RedirectToAction("Login");
             }
-            return View(model);
-        }
+            var nodeRecordBak = _nodeRecord.GetById(nodeRecord.NodeRecordId);
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgetPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            if(code == null)
-            {
-                throw new ApplicationException("重置密码需要验证码.");
-            }
-            var model = new ResetPasswordViewModel { Code = code };
-            return View(model);
+            nodeRecordBak.User = null;
+            nodeRecordBak.Node = null;
+            _nodeRecord.Delete(nodeRecordBak);
+            return RedirectToAction("NodeRecord");
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public IActionResult CancelTopicRecord([Bind("TopicRecordId,UserId,TopicId,AddTime")]TopicRecord topicRecord)
         {
-            if (!ModelState.IsValid)
+            if (!_signInManager.IsSignedIn(User))
             {
-                return View(model);
+                return RedirectToAction("Login");
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if(user == null)
-            {
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            AddErrors(result);
-            return View();
+
+            var topicRecordBak = _topicRecord.GetById(topicRecord.TopicRecordId);
+            topicRecordBak.User = null;
+            topicRecordBak.Topic = null;
+            _topicRecord.Delete(topicRecordBak);
+            return RedirectToAction("TopicRecord");
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPasswordConfirmation()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CancelFollowRecord([Bind("FollowRecordId,UserId,,FollowUserId,AddTime")]FollowRecord followRecord)
         {
-            return View();
-        }
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Login");
+            }
 
-        [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View();
+            var followRecordBak = _followRecord.GetById(followRecord.FollowRecordId);
+            followRecordBak.User = null;
+            followRecordBak.FollowUser = null;
+            _followRecord.Delete(followRecordBak);
+            return RedirectToAction("FollowRecord");
         }
 
         [HttpGet]
@@ -321,6 +349,7 @@ namespace BBS.Controllers
 
             return string.IsNullOrEmpty(fileSave) ? string.Empty : fileSave;
         }
+
         private void AddErrors(IdentityResult result)
         {
             foreach(var error in result.Errors)

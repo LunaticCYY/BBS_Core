@@ -16,7 +16,7 @@
                     <div class="info">
                         <a class="node" href="/topic/node/@Model.Node.NodeId">@Model.Node.Name</a>
                         ·
-                        <a href="#">@Model.User.UserName</a>
+                        <a href="/Account/UserInfo/@Model.User.Id">@Model.User.UserName</a>
                         ·
                         于 <abbr class="timeago">@Model.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>发布
                         ·
@@ -112,14 +112,10 @@
                         <div class="infos media-right">
                             <div class="info">
                                 <span class="name">
-                                    <a href="#replyuser_@item.User.Id">@item.User.UserName</a>
+                                    <a href="/Account/UserInfo/@Model.User.Id">@item.User.UserName</a>
                                 </span> ·
                                 <span class="time">
                                     <a class="reply-floor" href="#reply@(i+1)">#@(i + 1)</a> · <abbr class="timeago">@item.AddTime.ToString("yyyy-MM-dd HH:mm")</abbr>
-                                </span>
-                                <span>
-                                    <a title="赞" data-count="0" data-state="" data-type="Reply" data-id="297575" class="likeable " href="#"><i class="fa fa-thumbs-up"></i> <span></span></a>
-                                    <a data-floor="1" data-login="adamshen" title="回复此楼" class="btn-reply fa fa-mail-reply" href="#"></a>
                                 </span>
                             </div>
                             <div class="markdown">

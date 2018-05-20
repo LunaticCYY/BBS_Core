@@ -12,9 +12,10 @@ using System;
 namespace BBS.Migrations
 {
     [DbContext(typeof(BBSContext))]
-    partial class BBSContextModelSnapshot : ModelSnapshot
+    [Migration("20180520140346_Test")]
+    partial class Test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
