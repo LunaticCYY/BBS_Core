@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BBS.Data;
 using BBS.Models;
+using Microsoft.AspNetCore.Identity;
+using BBS.Controllers;
 
 namespace BBS.Areas.Admin.Controllers
 {
@@ -14,15 +16,21 @@ namespace BBS.Areas.Admin.Controllers
     public class NodeController : Controller
     {
         private readonly BBSContext _context;
+        public UserManager<User> UserManager { get; }
 
-        public NodeController(BBSContext context)
+        public NodeController(BBSContext context, UserManager<User> userManager)
         {
             _context = context;
+            UserManager = userManager;
         }
 
         // GET: Admin/Node
         public async Task<IActionResult> Index()
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             var bBSContext = _context.Nodes.Include(n => n.User);
             return View(await bBSContext.ToListAsync());
         }
@@ -30,6 +38,10 @@ namespace BBS.Areas.Admin.Controllers
         // GET: Admin/Node/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -49,9 +61,12 @@ namespace BBS.Areas.Admin.Controllers
         // GET: Admin/Node/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName");
-            ViewBag.IsParent = Enum.GetValues(typeof(IsParent)).Cast<IsParent>();
-            ViewBag.ParentId = _context.Nodes.ToList();
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName");
+            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name");
             return View();
         }
 
@@ -62,6 +77,10 @@ namespace BBS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NodeId,Name,UserId,IsParent,ParentId,AddTime")] Node node)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (ModelState.IsValid)
             {
                 node.AddTime = DateTime.Now;
@@ -73,13 +92,18 @@ namespace BBS.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name", node.ParentId);
             return View(node);
         }
 
         // GET: Admin/Node/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -90,7 +114,8 @@ namespace BBS.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name", node.ParentId);
             return View(node);
         }
 
@@ -101,6 +126,10 @@ namespace BBS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("NodeId,Name,UserId,IsParent,ParentId,AddTime")] Node node)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id != node.NodeId)
             {
                 return NotFound();
@@ -126,13 +155,18 @@ namespace BBS.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName", node.UserId);
+            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name", node.ParentId);
             return View(node);
         }
 
         // GET: Admin/Node/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -154,6 +188,10 @@ namespace BBS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             var node = await _context.Nodes.Include(n => n.User).SingleOrDefaultAsync(m => m.NodeId == id);
             node.User = null;
             _context.Nodes.Remove(node);

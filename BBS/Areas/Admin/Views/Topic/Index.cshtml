@@ -6,34 +6,30 @@
 }
 
 <h2>帖子管理</h2>
-
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ViewCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReplyCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastReplyTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AddTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastTime)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReplyCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastReplyTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastTime)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastReplyUserId)
             </th>
@@ -82,9 +78,8 @@
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
-                @*<a asp-action="Edit" asp-route-id="@item.TopicId">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.TopicId">详情</a> |
-                <a asp-action="Delete" asp-route-id="@item.TopicId">删除</a>
+                <a asp-action="Details" asp-route-id="@item.TopicId">详情</a> @*|
+                <a asp-action="Delete" asp-route-id="@item.TopicId">删除</a>*@
             </td>
         </tr>
 }

@@ -119,7 +119,7 @@ namespace BBS.Controllers
                     ModelState.AddModelError(string.Empty, "该邮箱已被注册");
                     return View(model);
                 }
-                var user = new User { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
+                var user = new User { UserName = model.Email, Email = model.Email, EmailConfirmed = true, AddTime = DateTime.Now };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

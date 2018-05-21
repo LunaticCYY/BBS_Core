@@ -1,14 +1,14 @@
 ﻿@model BBS.Models.TopicRecord
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "详情";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>详情</h2>
 
 <div>
-    <h4>TopicRecord</h4>
+    <h4>话题收藏</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -32,6 +32,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.TopicRecordId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回首页</a>
 </div>

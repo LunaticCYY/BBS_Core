@@ -6,10 +6,6 @@
 }
 
 <h2>关注用户管理</h2>
-
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -40,9 +36,7 @@
                 @Html.DisplayFor(modelItem => item.AddTime)
             </td>
             <td>
-                @*<a asp-action="Edit" asp-route-id="@item.FollowRecordId">Edit</a> |*@
                 <a asp-action="Details" asp-route-id="@item.FollowRecordId">详情</a>
-                @*<a asp-action="Delete" asp-route-id="@item.FollowRecordId">Delete</a>*@
             </td>
         </tr>
 }

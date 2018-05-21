@@ -1,11 +1,11 @@
 ﻿@model BBS.Models.NodeRecord
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "详情";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>详情</h2>
 
 <div>
     <h4>NodeRecord</h4>
@@ -32,6 +32,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.NodeRecordId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">返回首页</a>
 </div>

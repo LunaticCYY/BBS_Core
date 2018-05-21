@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BBS.Data;
 using BBS.Models;
+using Microsoft.AspNetCore.Identity;
+using BBS.Controllers;
 
 namespace BBS.Areas.Admin.Controllers
 {
@@ -14,15 +16,21 @@ namespace BBS.Areas.Admin.Controllers
     public class ReplyController : Controller
     {
         private readonly BBSContext _context;
+        public UserManager<User> UserManager { get; }
 
-        public ReplyController(BBSContext context)
+        public ReplyController(BBSContext context, UserManager<User> userManager)
         {
             _context = context;
+            UserManager = userManager;
         }
 
         // GET: Admin/Reply
         public async Task<IActionResult> Index()
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             var bBSContext = _context.Replys.Include(r => r.Topic).Include(r => r.User);
             return View(await bBSContext.ToListAsync());
         }
@@ -30,6 +38,10 @@ namespace BBS.Areas.Admin.Controllers
         // GET: Admin/Reply/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -47,93 +59,13 @@ namespace BBS.Areas.Admin.Controllers
             return View(reply);
         }
 
-        // GET: Admin/Reply/Create
-        public IActionResult Create()
-        {
-            ViewData["TopicId"] = new SelectList(_context.Topics, "TopicId", "Title");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName");
-            return View();
-        }
-
-        // POST: Admin/Reply/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReplyId,UserId,TopicId,IsTopic,ParentId,Content,AddTime,LastTime")] Reply reply)
-        {
-            if (ModelState.IsValid)
-            {
-                reply.AddTime = DateTime.Now;
-                reply.LastTime = DateTime.Now;
-                _context.Add(reply);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "TopicId", "Title", reply.TopicId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", reply.UserId);
-            return View(reply);
-        }
-
-        // GET: Admin/Reply/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reply = await _context.Replys.SingleOrDefaultAsync(m => m.ReplyId == id);
-            if (reply == null)
-            {
-                return NotFound();
-            }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "TopicId", "Title", reply.TopicId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", reply.UserId);
-            return View(reply);
-        }
-
-        // POST: Admin/Reply/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ReplyId,UserId,TopicId,IsTopic,ParentId,Content,AddTime,LastTime")] Reply reply)
-        {
-            if (id != reply.ReplyId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    reply.LastTime = DateTime.Now;
-                    _context.Update(reply);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReplyExists(reply.ReplyId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TopicId"] = new SelectList(_context.Topics, "TopicId", "Title", reply.TopicId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "UserName", reply.UserId);
-            return View(reply);
-        }
-
         // GET: Admin/Reply/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -156,6 +88,10 @@ namespace BBS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            if (!UserManager.GetUserName(User).ToLower().Equals("admin"))
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
             var reply = await _context.Replys.Include(r => r.Topic).Include(r => r.User).SingleOrDefaultAsync(m => m.ReplyId == id);
             reply.Topic = null;
             reply.User = null;

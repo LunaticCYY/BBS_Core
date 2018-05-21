@@ -6,10 +6,6 @@
 }
 
 <h2>回复管理</h2>
-
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -64,9 +60,8 @@
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
-                @*<a asp-action="Edit" asp-route-id="@item.ReplyId">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.ReplyId">详情</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReplyId">删除</a>
+                <a asp-action="Details" asp-route-id="@item.ReplyId">详情</a> @*|
+                <a asp-action="Delete" asp-route-id="@item.ReplyId">删除</a>*@
             </td>
         </tr>
 }

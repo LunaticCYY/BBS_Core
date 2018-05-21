@@ -167,6 +167,7 @@ namespace BBS.Controllers
             var userId = UserManager.GetUserId(User);
             if (userId != null)
             {
+                ViewBag.UserId = userId;
                 ViewBag.NodeRecordCount = _nodeRecord.TList(a => a.UserId == userId).ToList().Count();
                 ViewBag.TopicRecordCount = _topicRecord.TList(a => a.UserId == userId).ToList().Count();
                 ViewBag.FollowRecordCount = _followRecord.TList(a => a.UserId == userId).ToList().Count();

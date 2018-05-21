@@ -35,7 +35,7 @@ namespace BBS
                 .AddEntityFrameworkStores<BBSContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
             services.AddSingleton<IOperation<User>, Operation<User>>();
@@ -50,6 +50,16 @@ namespace BBS
             services.AddSingleton<IFollowRecordOperation, FollowRecordOperation>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<UserServices>();
+            services.AddMemoryCache();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "Admin",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireClaim("Admin", "Allowed");
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

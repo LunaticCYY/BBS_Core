@@ -1,15 +1,13 @@
 ﻿@model BBS.Models.Reply
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "删除";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h2>删除</h2>
 <div>
-    <h4>Reply</h4>
+    <h4>回复</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -58,7 +56,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ReplyId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="确认删除" class="btn btn-default" /> |
+        <a asp-action="Index">返回首页</a>
     </form>
 </div>
