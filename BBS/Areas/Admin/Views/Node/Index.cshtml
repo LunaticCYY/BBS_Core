@@ -35,22 +35,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <a href="~/Home/Node/@item.NodeId"> @Html.DisplayFor(modelItem => item.Name)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsParent)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ParentId)
+                <a href="~/Home/Node/@item.ParentId"> @Html.DisplayFor(modelItem => item.ParentId)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AddTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
+                <a href="~/Account/UserInfo/@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NodeId">修改</a> |
+                @*<a asp-action="Edit" asp-route-id="@item.NodeId">修改</a> |*@
                 <a asp-action="Details" asp-route-id="@item.NodeId">详情</a> @*|
                 <a asp-action="Delete" asp-route-id="@item.NodeId">删除</a>*@
             </td>

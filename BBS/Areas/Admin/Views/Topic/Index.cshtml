@@ -47,10 +47,10 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
+            <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                <a href="~/Topic/@item.TopicId">@Html.DisplayFor(modelItem => item.Title)</a>
             </td>
-            <td>
+            <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
                 @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
@@ -75,8 +75,8 @@
                 @Html.DisplayFor(modelItem => item.Node.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
+                <a href="~/Account/UserInfo/@item.User.Id">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+</td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.TopicId">详情</a> @*|
                 <a asp-action="Delete" asp-route-id="@item.TopicId">删除</a>*@

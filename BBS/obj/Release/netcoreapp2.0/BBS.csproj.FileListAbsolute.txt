@@ -1,0 +1,11 @@
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\bin\Release\netcoreapp2.0\BBS.deps.json
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\bin\Release\netcoreapp2.0\BBS.runtimeconfig.json
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\bin\Release\netcoreapp2.0\BBS.runtimeconfig.dev.json
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\bin\Release\netcoreapp2.0\BBS.dll
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\bin\Release\netcoreapp2.0\BBS.pdb
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.csprojResolveAssemblyReference.cache
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.csproj.CoreCompileInputs.cache
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.AssemblyInfoInputs.cache
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.AssemblyInfo.cs
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.dll
+D:\lunatic\Documents\Visual Studio 2017\Projects\BBS_Core\BBS\obj\Release\netcoreapp2.0\BBS.pdb

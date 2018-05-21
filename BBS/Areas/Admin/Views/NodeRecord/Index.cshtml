@@ -31,10 +31,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a asp-controller="User" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+                <a href="~/Account/UserInfo/@item.User.Id">@Html.DisplayFor(modelItem => item.User.UserName)</a>
             </td>
             <td>
-                <a asp-controller="Node" asp-action="Details" asp-route-id="@item.NodeId">@Html.DisplayFor(modelItem => item.Node.Name)</a>
+                <a href="~/Home/Node/@item.NodeId">@Html.DisplayFor(modelItem => item.Node.Name)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AddTime)

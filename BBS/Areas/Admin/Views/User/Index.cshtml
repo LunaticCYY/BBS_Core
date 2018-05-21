@@ -60,7 +60,7 @@
                 @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                <a href="~/Account/UserInfo/@item.Id">@Html.DisplayFor(modelItem => item.UserName)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)

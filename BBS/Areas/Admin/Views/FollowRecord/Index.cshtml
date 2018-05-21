@@ -27,10 +27,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
+                <a href="~/Account/UserInfo/@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FollowUser.UserName)
+                <a href="~/Account/UserInfo/@item.FollowUserId">@Html.DisplayFor(modelItem => item.FollowUser.UserName)</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AddTime)

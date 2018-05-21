@@ -50,7 +50,7 @@ namespace BBS
             services.AddSingleton<IFollowRecordOperation, FollowRecordOperation>();
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<UserServices>();
-            services.AddMemoryCache();
+            //services.AddMemoryCache();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(

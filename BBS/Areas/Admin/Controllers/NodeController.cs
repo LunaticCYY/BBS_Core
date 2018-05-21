@@ -114,8 +114,8 @@ namespace BBS.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName", node.UserId);
-            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name", node.ParentId);
+            ViewBag.UserId = new SelectList(_context.Users, "Id", "UserName");
+            ViewBag.ParentId = new SelectList(_context.Nodes.Where(a => a.IsParent == IsParent.Parent), "NodeId", "Name");
             return View(node);
         }
 

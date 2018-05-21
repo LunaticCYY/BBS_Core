@@ -54,10 +54,10 @@
                 @Html.DisplayFor(modelItem => item.LastTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Topic.Title)
+                <a href="~/Topic/@item.TopicId">@Html.DisplayFor(modelItem => item.Topic.Title)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
+                <a href="~/Account/UserInfo/@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.ReplyId">详情</a> @*|
