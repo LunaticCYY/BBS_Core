@@ -28,7 +28,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Node.Name)
+                                    <a href="~/Home/Node/@item.NodeId">@Html.DisplayFor(modelItem => item.Node.Name)</a>
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.AddTime)

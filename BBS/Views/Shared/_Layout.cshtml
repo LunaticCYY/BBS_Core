@@ -40,6 +40,9 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">联系</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
+                <form class="navbar-form navbar-right" asp-controller="Home" asp-action="Index" method="get">
+                    <input type="text" class="form-control" name="s" placeholder="搜索...">
+                </form>
             </div>
         </div>
     </nav>

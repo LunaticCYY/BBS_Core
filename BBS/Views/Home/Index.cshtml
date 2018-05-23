@@ -22,7 +22,7 @@
                 {
                     <div class="topic">
                         <div class="avatar media-left">
-                            <a href="#"><img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.Image)? "/UploadImages/default.png":"/UploadImages/"+item.Image)"></a>
+                            <a href="/Account/UserInfo/@item.UserId"><img class="avatar" width="70" height="70" src="@(string.IsNullOrEmpty(item.Image)? "/UploadImages/default.png":"/UploadImages/"+item.Image)"></a>
                         </div>
                         <div class="media-body">
                             <div class="title">
@@ -31,7 +31,7 @@
                                 </a>
                             </div>
                             <div class="info">
-                                <a href="Home/Node/@item.NodeId">@item.NodeName</a> &nbsp;<a href="/Account/UserInfo/@item.UserId"><label>@item.UserName</label></a> @item.AddTime.ToString("yyyy-MM-dd HH:mm")
+                                <a href="/Home/Node/@item.NodeId">@item.NodeName</a> &nbsp;<a href="/Account/UserInfo/@item.UserId"><label>@item.UserName</label></a> @item.AddTime.ToString("yyyy-MM-dd HH:mm")
                                 @if (item.LastReplyTime != DateTime.MinValue)
                                 {
                                     <label>最后回复 @item.LastReplyTime.ToString("yyyy-MM-dd HH:mm")</label>

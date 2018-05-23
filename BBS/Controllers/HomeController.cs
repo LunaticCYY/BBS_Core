@@ -139,7 +139,7 @@ namespace BBS.Controllers
             }
             if (!string.IsNullOrEmpty(Request.Query["s"]))
             {
-                topicResult = _topic.PageList(a => a.Title.Contains(Request.Query["s"]), pageSize, pageIndex);
+                topicResult = _topic.PageList(a => a.NodeId == nodeId && a.Title.Contains(Request.Query["s"]), pageSize, pageIndex);
             }
             else
             {

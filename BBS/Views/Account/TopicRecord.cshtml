@@ -27,7 +27,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>
+                                <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
                                     <a asp-controller="Topic" asp-action="Index" asp-route-id="@item.TopicId">@Html.DisplayFor(modelItem => item.Topic.Title)</a>
                                 </td>
                                 <td>

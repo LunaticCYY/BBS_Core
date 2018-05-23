@@ -21,8 +21,8 @@ namespace BBS.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        public UserManager<User> _userManager { get; }
+        public SignInManager<User> _signInManager { get; }
         //private readonly IEmailSender _emailSender;
         private IOperation<User> _user;
         //private readonly ILogger _logger;
@@ -81,7 +81,14 @@ namespace BBS.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var EmailCheck = _user.TList(a => a.Email == model.Email).FirstOrDefault() ;
+                if(EmailCheck == null)
+                {
+                    ModelState.AddModelError(string.Empty, "该邮箱未注册");
+                    return View(model);
+                }
+                var UserName = EmailCheck.UserName;
+                var result = await _signInManager.PasswordSignInAsync(UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     //_logger.LogInformation("用户登录");
@@ -324,7 +331,8 @@ namespace BBS.Controllers
                 user.Introduce = model.Introduce;
             }
 
-            _user.Update(user);
+            //_user.Update(user);
+            await _userManager.UpdateAsync(user);
             return RedirectToLocal(returnUrl);
         }
 

@@ -9,6 +9,7 @@ namespace BBS.Models
     {
         public string TopicId { get; set; }
         [Display(Name = "标题")]
+        [StringLength(100, ErrorMessage = "{0}长度应小于{1}")]
         public string Title { get; set; }
         [Display(Name = "创建人Id")]
         public string UserId { get; set; }
